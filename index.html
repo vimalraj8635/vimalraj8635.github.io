@@ -214,7 +214,7 @@
 
   <!-- NAV -->
   <nav>
-    <a class="nav-logo" href="#">vimalraj.dev</a>
+    <a class="nav-logo" href="#">Vimalraj G</a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#about">about</a></li>
       <li><a href="#skills">skills</a></li>
@@ -231,7 +231,7 @@
   <section class="hero">
     <div class="hero-tag">Available for DevOps roles</div>
     <h1>Hi, I'm <span>Vimalraj G</span></h1>
-    <div class="hero-subtitle">$ <span class="hl">DevOps Engineer</span> --fresher --location="Chennai"</div>
+    <div class="hero-subtitle">$ <span class="hl">DevOps Engineer</span> --fresher --location="Tirunelveli"</div>
     <p class="hero-desc">I build automated pipelines, containerize applications, and deploy to the cloud. Passionate about bridging development and operations through automation.</p>
     <div class="hero-btns">
       <a class="btn-primary" href="#projects">View my work</a>
@@ -240,7 +240,7 @@
   </section>
 
   <!-- TERMINAL -->
-  <div class="terminal-wrap">
+  <!-- <div class="terminal-wrap">
     <div class="terminal">
       <div class="terminal-bar">
         <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
@@ -261,7 +261,7 @@
         <div class="t-out">Ready to contribute! ▮</div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- ABOUT -->
   <section id="about">
@@ -271,7 +271,7 @@
       <div class="section-line"></div>
       <div class="about-grid">
         <div class="about-text">
-          <p>I'm a final-year <strong>Computer Science student</strong> at Francis Xavier Engineering College, Chennai, passionate about DevOps culture and cloud technologies.</p>
+          <p>I'm a final-year <strong>Computer Science student</strong> at Francis Xavier Engineering College, Tirunelveli, passionate about DevOps culture and cloud technologies.</p>
           <p>I've built a real-world <strong>automated CI/CD pipeline</strong> that containerizes a Flask app with Docker, pushes to Docker Hub, and deploys to the cloud — all triggered by a single Git push.</p>
           <p>I'm currently expanding my skills in <strong>Kubernetes, Jenkins, and Terraform</strong> to become a well-rounded DevOps engineer. I'm also a <strong>published researcher</strong> in IJSRED journal.</p>
           <p>I believe in learning by building real things — every tool I list on my resume is something I've actually used in a project.</p>
@@ -479,7 +479,7 @@
             <div class="contact-icon" style="background:rgba(99,179,237,0.15)">✉</div>
             <div>
               <div class="contact-label">email</div>
-              <div class="contact-value">vimalraj8635@gmail.com</div>
+              <div class="contact-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="42342b2f232e3023287a74717702252f232b2e6c212d2f">[email&#160;protected]</a></div>
             </div>
           </div>
           <div class="contact-item">
@@ -507,7 +507,7 @@
             <div class="contact-icon" style="background:rgba(246,135,179,0.15)">📍</div>
             <div>
               <div class="contact-label">location</div>
-              <div class="contact-value">Chennai, Tamil Nadu, India</div>
+              <div class="contact-value">Tirunelveli, Tamil Nadu, India</div>
             </div>
           </div>
         </div>
@@ -537,12 +537,12 @@
     Built with ♥ by <span>Vimalraj G</span> &nbsp;|&nbsp; DevOps Engineer &nbsp;|&nbsp; Chennai, India
   </footer>
 
+
   <script>
     function toggleMenu() {
       document.getElementById('navLinks').classList.toggle('open');
     }
 
-    // Close nav when link clicked on mobile
     document.querySelectorAll('.nav-links a').forEach(link => {
       link.addEventListener('click', () => {
         document.getElementById('navLinks').classList.remove('open');
@@ -553,17 +553,38 @@
       const name = document.getElementById('fname').value.trim();
       const email = document.getElementById('femail').value.trim();
       const msg = document.getElementById('fmsg').value.trim();
+
       if (!name || !email || !msg) {
         alert('Please fill in all fields.');
         return;
       }
-      // Replace with your actual form handler (Formspree, EmailJS, etc.)
-      const success = document.getElementById('formSuccess');
-      success.style.display = 'block';
-      document.getElementById('fname').value = '';
-      document.getElementById('femail').value = '';
-      document.getElementById('fmsg').value = '';
-      setTimeout(() => success.style.display = 'none', 4000);
+
+      const btn = document.querySelector('.contact-form .btn-primary');
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+
+      fetch('http://localhost:5000/send-message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, email: email, message: msg })
+      })
+      .then(res => res.json())
+      .then(data => {
+        const success = document.getElementById('formSuccess');
+        success.style.display = 'block';
+        document.getElementById('fname').value = '';
+        document.getElementById('femail').value = '';
+        document.getElementById('fmsg').value = '';
+        btn.textContent = 'Send Message →';
+        btn.disabled = false;
+        setTimeout(() => success.style.display = 'none', 4000);
+      })
+      .catch(err => {
+        alert('❌ Error sending message. Make sure your Flask server is running.');
+        console.error(err);
+        btn.textContent = 'Send Message →';
+        btn.disabled = false;
+      });
     }
   </script>
 
