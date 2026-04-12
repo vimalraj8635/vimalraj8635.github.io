@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vimalraj G — DevOps Engineer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #63b3ed;
+      --purple: #9f7aea;
+      --orange: #f6ad55;
+      --green: #68d391;
+      --cyan: #81e6d9;
+      --pink: #f6a8c3;
+      --bg: #0a0a0f;
+      --bg2: #0d1117;
+      --bg3: #161b22;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --dim: #64748b;
+      --border: rgba(255,255,255,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(99,179,237,0.15);
+      padding: 14px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Fira Code', monospace;
+      font-size: 18px; font-weight: 500;
+      background: linear-gradient(90deg, #63b3ed, #9f7aea, #f6ad55);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      font-size: 13px; color: var(--muted); text-decoration: none;
+      font-family: 'Fira Code', monospace; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 22px; height: 2px; background: var(--muted); border-radius: 2px; transition: 0.3s; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 90px 40px 60px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 400px;
+      background: radial-gradient(ellipse, rgba(99,179,237,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-block;
+      font-family: 'Fira Code', monospace; font-size: 13px; color: var(--accent);
+      background: rgba(99,179,237,0.1); border: 1px solid rgba(99,179,237,0.25);
+      border-radius: 20px; padding: 6px 18px; margin-bottom: 22px;
+    }
+    .hero-tag::before { content: '● '; font-size: 10px; }
+    .hero h1 { font-size: 52px; font-weight: 600; line-height: 1.15; margin-bottom: 12px; color: #f1f5f9; }
+    .hero h1 span { background: linear-gradient(90deg, #63b3ed, #9f7aea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-subtitle { font-family: 'Fira Code', monospace; font-size: 18px; color: var(--dim); margin-bottom: 8px; }
+    .hero-subtitle .hl { color: var(--orange); }
+    .hero-desc { font-size: 16px; color: var(--muted); max-width: 560px; margin: 16px auto 36px; line-height: 1.75; }
+    .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      padding: 13px 30px; border-radius: 8px;
+      background: linear-gradient(135deg, #3182ce, #9f7aea);
+      color: white; font-size: 14px; font-weight: 500;
+      border: none; cursor: pointer; text-decoration: none; display: inline-block;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn-secondary {
+      padding: 13px 30px; border-radius: 8px;
+      background: transparent; color: var(--accent); font-size: 14px; font-weight: 500;
+      border: 1px solid rgba(99,179,237,0.4); cursor: pointer; text-decoration: none; display: inline-block;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-secondary:hover { background: rgba(99,179,237,0.08); transform: translateY(-1px); }
+
+    /* ── TERMINAL ── */
+    .terminal-wrap { padding: 0 40px 70px; max-width: 720px; margin: 0 auto; }
+    .terminal { background: var(--bg2); border: 1px solid rgba(99,179,237,0.2); border-radius: 12px; overflow: hidden; }
+    .terminal-bar { background: var(--bg3); padding: 10px 16px; display: flex; align-items: center; gap: 8px; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.r { background: #f87171; } .dot.y { background: #fbbf24; } .dot.g { background: #34d399; }
+    .t-title { font-family: 'Fira Code', monospace; font-size: 12px; color: #4b5563; margin-left: auto; }
+    .terminal-body { padding: 20px 24px; font-family: 'Fira Code', monospace; font-size: 13px; line-height: 2.1; }
+    .t-line { display: flex; gap: 10px; }
+    .t-prompt { color: #34d399; }
+    .t-cmd { color: var(--text); }
+    .t-out { color: var(--accent); padding-left: 20px; }
+
+    /* ── SECTIONS ── */
+    section { padding: 70px 40px; }
+    .max-w { max-width: 1040px; margin: 0 auto; }
+    .section-label { font-family: 'Fira Code', monospace; font-size: 12px; color: var(--purple); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+    .section-title { font-size: 32px; font-weight: 600; color: #f1f5f9; margin-bottom: 6px; }
+    .section-title span { color: var(--accent); }
+    .section-line { width: 48px; height: 3px; background: linear-gradient(90deg, var(--accent), var(--purple)); border-radius: 2px; margin-bottom: 40px; }
+    .alt-bg { background: rgba(255,255,255,0.015); }
+
+    /* ── ABOUT ── */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    .about-text { font-size: 15px; color: var(--muted); line-height: 1.85; }
+    .about-text p { margin-bottom: 16px; }
+    .about-text strong { color: var(--accent); font-weight: 500; }
+    .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .stat-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+    .stat-num { font-size: 30px; font-weight: 600; color: var(--accent); font-family: 'Fira Code', monospace; }
+    .stat-label { font-size: 12px; color: var(--dim); margin-top: 5px; }
+
+    /* ── SKILLS ── */
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px; }
+    .skill-category { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: border-color 0.2s; }
+    .skill-category:hover { border-color: rgba(99,179,237,0.25); }
+    .skill-cat-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .skill-cat-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .skill-cat-name { font-size: 14px; font-weight: 500; color: #e2e8f0; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .skill-tag { font-size: 12px; font-family: 'Fira Code', monospace; padding: 5px 11px; border-radius: 6px; border: 1px solid; transition: transform 0.15s; cursor: default; }
+    .skill-tag:hover { transform: translateY(-2px); }
+    .tag-blue   { background: rgba(99,179,237,0.1);  border-color: rgba(99,179,237,0.3);  color: #63b3ed; }
+    .tag-purple { background: rgba(159,122,234,0.1); border-color: rgba(159,122,234,0.3); color: #9f7aea; }
+    .tag-green  { background: rgba(72,187,120,0.1);  border-color: rgba(72,187,120,0.3);  color: #68d391; }
+    .tag-orange { background: rgba(246,173,85,0.1);  border-color: rgba(246,173,85,0.3);  color: #f6ad55; }
+    .tag-cyan   { background: rgba(129,230,217,0.1); border-color: rgba(129,230,217,0.3); color: #81e6d9; }
+    .tag-learning { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: var(--dim); font-style: italic; }
+
+    /* ── PROJECTS ── */
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+    .project-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 14px; padding: 26px; position: relative; overflow: hidden; transition: border-color 0.2s, transform 0.2s; }
+    .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+    .project-card.blue::before   { background: linear-gradient(90deg, #3182ce, #63b3ed); }
+    .project-card.purple::before { background: linear-gradient(90deg, #7c3aed, #9f7aea); }
+    .project-card.green::before  { background: linear-gradient(90deg, #276749, #68d391); }
+    .project-card:hover { border-color: rgba(99,179,237,0.3); transform: translateY(-3px); }
+    .project-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-family: 'Fira Code', monospace; padding: 4px 10px; border-radius: 20px; margin-bottom: 14px; }
+    .badge-live      { background: rgba(72,187,120,0.15); color: #68d391; border: 1px solid rgba(72,187,120,0.3); }
+    .badge-published { background: rgba(246,173,85,0.15); color: #f6ad55; border: 1px solid rgba(246,173,85,0.3); }
+    .badge-soon      { background: rgba(99,179,237,0.1);  color: #63b3ed; border: 1px solid rgba(99,179,237,0.25); }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .project-title { font-size: 17px; font-weight: 600; color: #f1f5f9; margin-bottom: 10px; }
+    .project-desc { font-size: 13px; color: var(--dim); line-height: 1.75; margin-bottom: 18px; }
+    .project-stack { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px; }
+    .stack-tag { font-size: 11px; font-family: 'Fira Code', monospace; padding: 3px 9px; border-radius: 4px; background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid rgba(255,255,255,0.08); }
+    .project-links { display: flex; gap: 16px; }
+    .proj-link { font-size: 12px; font-family: 'Fira Code', monospace; color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 5px; transition: color 0.2s; }
+    .proj-link:hover { color: var(--purple); }
+
+    /* ── RESUME ── */
+    .resume-card { max-width: 620px; margin: 0 auto; text-align: center; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 16px; padding: 52px; }
+    .resume-icon { width: 68px; height: 68px; border-radius: 16px; background: linear-gradient(135deg, rgba(99,179,237,0.2), rgba(159,122,234,0.2)); border: 1px solid rgba(99,179,237,0.3); display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 22px; }
+    .resume-card h3 { font-size: 22px; font-weight: 600; color: #f1f5f9; margin-bottom: 12px; }
+    .resume-card p { font-size: 14px; color: var(--dim); margin-bottom: 28px; line-height: 1.7; }
+    .resume-highlights { display: flex; justify-content: center; gap: 24px; margin-bottom: 32px; flex-wrap: wrap; }
+    .res-hl { font-size: 12px; font-family: 'Fira Code', monospace; color: var(--muted); }
+    .res-hl span { color: var(--accent); }
+
+    /* ── CONTACT ── */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    .contact-info { display: flex; flex-direction: column; gap: 14px; }
+    .contact-item { display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); transition: border-color 0.2s; }
+    .contact-item:hover { border-color: rgba(99,179,237,0.25); }
+    .contact-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .contact-label { font-size: 11px; color: #4b5563; font-family: 'Fira Code', monospace; text-transform: uppercase; letter-spacing: 1px; }
+    .contact-value { font-size: 14px; color: var(--muted); margin-top: 2px; }
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 12px; color: var(--dim); font-family: 'Fira Code', monospace; }
+    .form-input { padding: 11px 14px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text); font-size: 14px; outline: none; transition: border-color 0.2s; font-family: 'Inter', sans-serif; width: 100%; }
+    .form-input:focus { border-color: rgba(99,179,237,0.5); }
+    .form-textarea { min-height: 110px; resize: vertical; }
+    .form-success { display: none; text-align: center; padding: 16px; background: rgba(72,187,120,0.1); border: 1px solid rgba(72,187,120,0.3); border-radius: 8px; color: #68d391; font-size: 14px; }
+
+    /* ── FOOTER ── */
+    footer { text-align: center; padding: 30px; border-top: 1px solid rgba(255,255,255,0.06); font-family: 'Fira Code', monospace; font-size: 12px; color: #374151; }
+    footer span { color: var(--purple); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      .nav-links { display: none; flex-direction: column; gap: 16px; position: absolute; top: 56px; left: 0; right: 0; background: rgba(10,10,15,0.97); padding: 24px; border-bottom: 1px solid var(--border); }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+      .hero { padding: 60px 20px 40px; }
+      .hero h1 { font-size: 34px; }
+      .hero-subtitle { font-size: 14px; }
+      .terminal-wrap { padding: 0 20px 48px; }
+      section { padding: 50px 20px; }
+      .about-grid { grid-template-columns: 1fr; gap: 28px; }
+      .contact-grid { grid-template-columns: 1fr; gap: 32px; }
+      .section-title { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">vimalraj.dev</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">about</a></li>
+      <li><a href="#skills">skills</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#resume">resume</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag">Available for DevOps roles</div>
+    <h1>Hi, I'm <span>Vimalraj G</span></h1>
+    <div class="hero-subtitle">$ <span class="hl">DevOps Engineer</span> --fresher --location="Chennai"</div>
+    <p class="hero-desc">I build automated pipelines, containerize applications, and deploy to the cloud. Passionate about bridging development and operations through automation.</p>
+    <div class="hero-btns">
+      <a class="btn-primary" href="#projects">View my work</a>
+      <a class="btn-secondary" href="#contact">Get in touch</a>
+    </div>
+  </section>
+
+  <!-- TERMINAL -->
+  <div class="terminal-wrap">
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <span class="t-title">bash — vimalraj@devops</span>
+      </div>
+      <div class="terminal-body">
+        <div class="t-line"><span class="t-prompt">❯</span><span class="t-cmd"> cat about.txt</span></div>
+        <div class="t-out">Name: Vimalraj G  |  Role: DevOps Engineer (Fresher)</div>
+        <div class="t-out">Location: Chennai, Tamil Nadu  |  Status: Open to work ✓</div>
+        <div class="t-line" style="margin-top:6px"><span class="t-prompt">❯</span><span class="t-cmd"> docker ps --format "table {{.Names}}\t{{.Status}}"</span></div>
+        <div class="t-out">cicd-pipeline &nbsp;&nbsp;&nbsp; Up 14 days (healthy)</div>
+        <div class="t-out">flask-app &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Up 14 days (healthy)</div>
+        <div class="t-line" style="margin-top:6px"><span class="t-prompt">❯</span><span class="t-cmd"> git log --oneline -3</span></div>
+        <div class="t-out">a3f2c1d  Add GitHub Actions CI/CD workflow</div>
+        <div class="t-out">b8e91f2  Dockerize Flask application</div>
+        <div class="t-out">c2d45a1  Initial project setup</div>
+        <div class="t-line" style="margin-top:6px"><span class="t-prompt">❯</span><span class="t-cmd"> echo "Ready to contribute!"</span></div>
+        <div class="t-out">Ready to contribute! ▮</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="max-w">
+      <div class="section-label">// 01. about me</div>
+      <div class="section-title">Who I <span>Am</span></div>
+      <div class="section-line"></div>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>I'm a final-year <strong>Computer Science student</strong> at Francis Xavier Engineering College, Chennai, passionate about DevOps culture and cloud technologies.</p>
+          <p>I've built a real-world <strong>automated CI/CD pipeline</strong> that containerizes a Flask app with Docker, pushes to Docker Hub, and deploys to the cloud — all triggered by a single Git push.</p>
+          <p>I'm currently expanding my skills in <strong>Kubernetes, Jenkins, and Terraform</strong> to become a well-rounded DevOps engineer. I'm also a <strong>published researcher</strong> in IJSRED journal.</p>
+          <p>I believe in learning by building real things — every tool I list on my resume is something I've actually used in a project.</p>
+        </div>
+        <div class="about-stats">
+          <div class="stat-card">
+            <div class="stat-num">1</div>
+            <div class="stat-label">Live CI/CD Project</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">7.1</div>
+            <div class="stat-label">CGPA (B.E. CSE)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">3+</div>
+            <div class="stat-label">AWS Services Used</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">1</div>
+            <div class="stat-label">Research Publication</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="alt-bg">
+    <div class="max-w">
+      <div class="section-label">// 02. skills</div>
+      <div class="section-title">Tech <span>Stack</span></div>
+      <div class="section-line"></div>
+      <div class="skills-grid">
+
+        <div class="skill-category">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon" style="background:rgba(99,179,237,0.15)">🛠</div>
+            <span class="skill-cat-name">DevOps & CI/CD</span>
+          </div>
+          <div class="skill-tags">
+            <span class="skill-tag tag-blue">Docker</span>
+            <span class="skill-tag tag-blue">GitHub Actions</span>
+            <span class="skill-tag tag-blue">Docker Hub</span>
+            <span class="skill-tag tag-blue">CI/CD Pipelines</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon" style="background:rgba(246,173,85,0.15)">☁</div>
+            <span class="skill-cat-name">Cloud (AWS)</span>
+          </div>
+          <div class="skill-tags">
+            <span class="skill-tag tag-orange">EC2</span>
+            <span class="skill-tag tag-orange">S3</span>
+            <span class="skill-tag tag-orange">Lambda</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon" style="background:rgba(72,187,120,0.15)">💻</div>
+            <span class="skill-cat-name">OS & Scripting</span>
+          </div>
+          <div class="skill-tags">
+            <span class="skill-tag tag-green">Linux (Ubuntu)</span>
+            <span class="skill-tag tag-green">Bash Scripting</span>
+            <span class="skill-tag tag-green">Shell Automation</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon" style="background:rgba(159,122,234,0.15)">🧠</div>
+            <span class="skill-cat-name">Programming</span>
+          </div>
+          <div class="skill-tags">
+            <span class="skill-tag tag-purple">Python</span>
+            <span class="skill-tag tag-purple">Java</span>
+            <span class="skill-tag tag-purple">C</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon" style="background:rgba(129,230,217,0.15)">🌐</div>
+            <span class="skill-cat-name">Web & Databases</span>
+          </div>
+          <div class="skill-tags">
+            <span class="skill-tag tag-cyan">HTML/CSS</span>
+            <span class="skill-tag tag-cyan">JavaScript</span>
+            <span class="skill-tag tag-cyan">React.js</span>
+            <span class="skill-tag tag-cyan">MySQL</span>
+            <span class="skill-tag tag-cyan">MongoDB</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <div class="skill-cat-header">
+            <div class="skill-cat-icon" style="background:rgba(255,255,255,0.06)">📚</div>
+            <span class="skill-cat-name">Currently Learning</span>
+          </div>
+          <div class="skill-tags">
+            <span class="skill-tag tag-learning">Kubernetes</span>
+            <span class="skill-tag tag-learning">Jenkins</span>
+            <span class="skill-tag tag-learning">Terraform</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="max-w">
+      <div class="section-label">// 03. projects</div>
+      <div class="section-title">What I've <span>Built</span></div>
+      <div class="section-line"></div>
+      <div class="projects-grid">
+
+        <div class="project-card blue">
+          <div class="project-badge badge-live"><span class="badge-dot"></span> Live</div>
+          <div class="project-title">Automated CI/CD Pipeline</div>
+          <div class="project-desc">End-to-end pipeline that automatically builds a Docker image, pushes to Docker Hub, and deploys a Flask app to Render on every Git push — zero manual steps.</div>
+          <div class="project-stack">
+            <span class="stack-tag">Docker</span>
+            <span class="stack-tag">GitHub Actions</span>
+            <span class="stack-tag">Python Flask</span>
+            <span class="stack-tag">Render</span>
+            <span class="stack-tag">Docker Hub</span>
+            <span class="stack-tag">Bash</span>
+          </div>
+          <div class="project-links">
+            <a class="proj-link" href="https://devops-cicd-app.onrender.com" target="_blank">▶ Live Demo</a>
+            <a class="proj-link" href="https://github.com/vimalraj8635/devops-cicd-project" target="_blank">{} Source Code</a>
+          </div>
+        </div>
+
+        <div class="project-card purple">
+          <div class="project-badge badge-published"><span class="badge-dot"></span> Published</div>
+          <div class="project-title">Fake News Detection</div>
+          <div class="project-desc">ML model using NLP and heuristic algorithms to classify fake vs real news articles. Achieved 80% accuracy. Research published in IJSRED journal.</div>
+          <div class="project-stack">
+            <span class="stack-tag">Python</span>
+            <span class="stack-tag">NLP</span>
+            <span class="stack-tag">Machine Learning</span>
+            <span class="stack-tag">SDLC</span>
+          </div>
+          <div class="project-links">
+            <a class="proj-link" href="#" target="_blank">📄 Research Paper</a>
+          </div>
+        </div>
+
+        <div class="project-card green">
+          <div class="project-badge badge-soon"><span class="badge-dot"></span> Coming Soon</div>
+          <div class="project-title">Kubernetes Deployment</div>
+          <div class="project-desc">Deploying containerized microservices on a Kubernetes cluster with auto-scaling, load balancing, and health checks. Currently in progress.</div>
+          <div class="project-stack">
+            <span class="stack-tag">Kubernetes</span>
+            <span class="stack-tag">Docker</span>
+            <span class="stack-tag">Minikube</span>
+            <span class="stack-tag">YAML</span>
+          </div>
+          <div class="project-links">
+            <a class="proj-link" href="#">🚀 In Progress</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- RESUME -->
+  <section id="resume" class="alt-bg">
+    <div class="max-w">
+      <div class="section-label">// 04. resume</div>
+      <div class="section-title">Download <span>Resume</span></div>
+      <div class="section-line"></div>
+      <div class="resume-card">
+        <div class="resume-icon">📄</div>
+        <h3>Vimalraj G — DevOps Engineer</h3>
+        <p>My resume highlights real-world project experience, technical skills, and certifications tailored for DevOps engineer roles. ATS-optimized and recruiter-ready.</p>
+        <div class="resume-highlights">
+          <span class="res-hl"><span>01</span> CI/CD Pipeline</span>
+          <span class="res-hl"><span>02</span> Docker & AWS</span>
+          <span class="res-hl"><span>03</span> Published Research</span>
+          <span class="res-hl"><span>04</span> ATS Optimized</span>
+        </div>
+        <!-- Replace href="#" with your actual resume file link after uploading -->
+        <a class="btn-primary" href="Vimalraj_G_DevOps_Resume.pdf" download>⬇ Download Resume</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="max-w">
+      <div class="section-label">// 05. contact</div>
+      <div class="section-title">Get In <span>Touch</span></div>
+      <div class="section-line"></div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-icon" style="background:rgba(99,179,237,0.15)">✉</div>
+            <div>
+              <div class="contact-label">email</div>
+              <div class="contact-value">vimalraj8635@gmail.com</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon" style="background:rgba(159,122,234,0.15)">📱</div>
+            <div>
+              <div class="contact-label">phone</div>
+              <div class="contact-value">+91 8903903127</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon" style="background:rgba(72,187,120,0.15)">🌐</div>
+            <div>
+              <div class="contact-label">linkedin</div>
+              <div class="contact-value">linkedin.com/in/vimalraj-g-41641a259</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon" style="background:rgba(246,173,85,0.15)">🐱</div>
+            <div>
+              <div class="contact-label">github</div>
+              <div class="contact-value">github.com/vimalraj8635</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon" style="background:rgba(246,135,179,0.15)">📍</div>
+            <div>
+              <div class="contact-label">location</div>
+              <div class="contact-value">Chennai, Tamil Nadu, India</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form">
+          <div class="form-group">
+            <label class="form-label">// name</label>
+            <input class="form-input" type="text" id="fname" placeholder="Your name" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">// email</label>
+            <input class="form-input" type="email" id="femail" placeholder="your@email.com" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">// message</label>
+            <textarea class="form-input form-textarea" id="fmsg" placeholder="Your message..."></textarea>
+          </div>
+          <button class="btn-primary" onclick="sendForm()" style="width:100%">Send Message →</button>
+          <div class="form-success" id="formSuccess">✓ Message sent! I'll get back to you soon.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    Built with ♥ by <span>Vimalraj G</span> &nbsp;|&nbsp; DevOps Engineer &nbsp;|&nbsp; Chennai, India
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+
+    // Close nav when link clicked on mobile
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('navLinks').classList.remove('open');
+      });
+    });
+
+    function sendForm() {
+      const name = document.getElementById('fname').value.trim();
+      const email = document.getElementById('femail').value.trim();
+      const msg = document.getElementById('fmsg').value.trim();
+      if (!name || !email || !msg) {
+        alert('Please fill in all fields.');
+        return;
+      }
+      // Replace with your actual form handler (Formspree, EmailJS, etc.)
+      const success = document.getElementById('formSuccess');
+      success.style.display = 'block';
+      document.getElementById('fname').value = '';
+      document.getElementById('femail').value = '';
+      document.getElementById('fmsg').value = '';
+      setTimeout(() => success.style.display = 'none', 4000);
+    }
+  </script>
+
+</body>
+</html>
