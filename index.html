@@ -563,7 +563,7 @@
       btn.textContent = 'Sending...';
       btn.disabled = true;
 
-      fetch('http://localhost:5000/send-message', {
+      fetch('https://vimalraj-portfolio.onrender.com/send-message', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: name, email: email, message: msg })

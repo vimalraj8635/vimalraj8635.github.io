@@ -1,16 +1,17 @@
 from flask import Flask, request, jsonify
 from flask_mail import Mail, Message
 from flask_cors import CORS
+import os
 
 app = Flask(__name__)
-CORS(app)  # Allow requests from your portfolio frontend
+CORS(app)
 
-# ── Gmail SMTP Configuration ──
+# ── Mail Configuration (from Environment Variables) ──
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'vimalraj8635@gmail.com'   # Your Gmail
-app.config['MAIL_PASSWORD'] = 'gyqo qkps djxd dadr'   # Gmail App Password (NOT real password)
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
 
 mail = Mail(app)
 
@@ -18,8 +19,8 @@ mail = Mail(app)
 def send_message():
     try:
         data = request.json
-        name    = data.get('name', '')
-        email   = data.get('email', '')
+        name = data.get('name', '')
+        email = data.get('email', '')
         message = data.get('message', '')
 
         if not name or not email or not message:
@@ -28,7 +29,7 @@ def send_message():
         msg = Message(
             subject=f"📩 New Portfolio Message from {name}",
             sender=app.config['MAIL_USERNAME'],
-            recipients=['vimalraj8635@gmail.com']   # Where you receive the email
+            recipients=[app.config['MAIL_USERNAME']]  # Send to yourself
         )
 
         msg.body = f"""
@@ -55,4 +56,5 @@ Sent from: vimalraj.dev portfolio
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run()
+    
