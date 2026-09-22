@@ -1,0 +1,4 @@
+      - name: Run Application / Tests
+        env:
+          RESEND_API_KEY: ${{ secrets.MAIL_API_KEY }}
+        run: python app.py
